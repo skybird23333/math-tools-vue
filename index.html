@@ -1,34 +1,41 @@
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<link rel="stylesheet" href="styles.css">
 
 <div id="app">
-	<ul>
-  		<li v-for="tab in tools">
-        	<a :class="{active: tab == tool}" @click="tool = tab">{{tab.replace(/-/g, " ")}}</a>
+    <ul style="background-color: var(--background-secondary)">
+        <li v-for="tab in tools">
+            <div class="button-container">
+                <a class="button" :class="{active: tab == tool}" @click="tool = tab">{{tab.replace(/-/g, " ")}}</a>
+            </div>
         </li>
 	</ul>
     <div style="margin-left:25%;padding:1px 16px;">
-    	<component :is="tool"></component>
+        <div class="card" style="margin: auto; min-width: 200px; max-width: 600px; ">
+            <component :is="tool"></component>
+        </div>
     </div>
 </div>
 
 <script>
-Vue.component('default', {
-	template: '<a href="https://github.com/skybird23333/math-tools-vue">Sauce code </a>'
+    Vue.component('default', {
+	template: `<div class="button-container">
+        <a class="button button-github" href="https://github.com/skybird23333/math-tools-vue">Source code </a>
+    </div>`
 })
 
 Vue.component('test-answers', {
     data: function() {
     	return {
-        	ip: ""
+            ip: ""
         }
     },
 	template: `
-    	<div>
-        	<h1>Your ip (<b>{{ ip }}</b>) will now be forwarded to the education department.<h1>
+    <div>
+        <h1>Your ip (<b>{{ ip }}</b>) will now be forwarded to the education department.</h1>
     		<img src="https://i1.sndcdn.com/artworks-SDP95erPKKyVHykD-XyfUnw-t500x500.jpg" alt="sus">
-        </div>
-        `,
-    async mounted () {
+            </div>
+            `,
+            async mounted () {
     	const res = await(
         		await fetch('https://ipinfo.io/', 
                 {headers: {"Accept": "application/json"}
@@ -42,10 +49,10 @@ Vue.component('test-answers', {
 Vue.component('midpoint-calculator', {
 	template: `
     	<div>
-        	x1 <input v-model.number="x1"><br>
-            y1 <input v-model.number="y1"><br>
-            x2 <input v-model.number="x2"><br>
-            y2 <input v-model.number="y2"><br>
+        	x1 <input class="input" v-model.number="x1"><br>
+            y1 <input class="input" v-model.number="y1"><br>
+            x2 <input class="input" v-model.number="x2"><br>
+            y2 <input class="input" v-model.number="y2"><br>
             {{ res }}
     	</div>
     `,
@@ -75,15 +82,15 @@ Vue.component('midpoint-calculator', {
 Vue.component('line-length-calculator', {
 	template: `
     	<div>
-        	x1 <input v-model.number="x1"><br>
-            y1 <input v-model.number="y1"><br>
-            x2 <input v-model.number="x2"><br>
-            y2 <input v-model.number="y2"><br>
+        	x1 <input class="input" v-model.number="x1"><br>
+            y1 <input class="input" v-model.number="y1"><br>
+            x2 <input class="input" v-model.number="x2"><br>
+            y2 <input class="input" v-model.number="y2"><br>
             {{ res }}
-    	</div>
-    `,
+            </div>
+            `,
     data: function() {
-    	return {
+        return {
         	x1: 0,
             x2: 0,
             y1: 0,
@@ -113,13 +120,13 @@ Vue.component('line-length-calculator', {
 Vue.component('gradient-finder', {
 	template: `
     	<div>
-        	x1 <input v-model="x1"><br>
-            y1 <input v-model="y1"><br>
-            x2 <input v-model="x2"><br>
-            y2 <input v-model="y2"><br>
+        	x1 <input class="input" v-model="x1"><br>
+            y1 <input class="input" v-model="y1"><br>
+            x2 <input class="input" v-model="x2"><br>
+            y2 <input class="input" v-model="y2"><br>
             {{ res }}
     	</div>
-    `,
+        `,
     data: function() {
     	return {
         	x1: 0,
@@ -130,7 +137,7 @@ Vue.component('gradient-finder', {
         }
     },
     watch: {
-    	x1: "calc",
+        x1: "calc",
         x2: "calc",
         y1: "calc",
         y2: "calc"
@@ -149,24 +156,24 @@ and then type this in calc bc i too lazy to add auto minimize fraction`
 Vue.component('pythag-calculator', {
 	template: `
     	<div>
-        	num1 <input v-model="n1"><br>
-            num2 <input v-model="n2"><br>
+        	num1 <input class="input" v-model="n1"><br>
+            num2 <input class="input" v-model="n2"><br>
             {{ res }}
-    	</div>
+            </div>
     `,
     data: function() {
     	return {
-        	n1: 0,
+            n1: 0,
             n2: 0,
             res: ""
         }
     },
     watch: {
-    	n1: "calc",
+        n1: "calc",
         n2: "calc"
     },
 	methods: {
-    	calc() {
+        calc() {
             this.res = Math.sqrt(Math.pow(this.n1,2)+Math.pow(this.n2,2))
         }
     }
@@ -174,9 +181,9 @@ Vue.component('pythag-calculator', {
 
 Vue.component('pythag-other-way-around', {
 	template: `
-    	<div>
-        	the long side <input v-model="n1"><br>
-            num2 <input v-model="n2"><br>
+    <div>
+        the long side <input class="input" v-model="n1"><br>
+            num2 <input class="input" v-model="n2"><br>
             {{ res }}
     	</div>
     `,
@@ -201,24 +208,24 @@ Vue.component('pythag-other-way-around', {
 var app = new Vue({
 	el: "#app",
     data: {
-    	tool: "default",
+        tool: "default",
         tools: [ 'midpoint-calculator',
         		'pythag-calculator',
                 'pythag-other-way-around',
                 'line-length-calculator',
                 'gradient-finder',
                 'test-answers']
-    }
-})
-</script>
+            }
+        })
+        </script>
 
 <style>
-body {
-  margin: 0;
-}
-
+    body {
+        margin: 0;
+    }
+    
 ul {
-  list-style-type: none;
+    list-style-type: none;
   margin: 0;
   padding: 0;
   width: 25%;
@@ -226,18 +233,6 @@ ul {
   position: fixed;
   height: 100%;
   overflow: auto;
-}
-
-li a {
-  display: block;
-  color: #000;
-  padding: 8px 16px;
-  text-decoration: none;
-}
-
-li a.active {
-  background-color: #04AA6D;
-  color: white;
 }
 
 li a:hover:not(.active) {
