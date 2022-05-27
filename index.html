@@ -1,0 +1,247 @@
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+
+<div id="app">
+	<ul>
+  		<li v-for="tab in tools">
+        	<a :class="{active: tab == tool}" @click="tool = tab">{{tab.replace(/-/g, " ")}}</a>
+        </li>
+	</ul>
+    <div style="margin-left:25%;padding:1px 16px;">
+    	<component :is="tool"></component>
+    </div>
+</div>
+
+<script>
+Vue.component('default', {
+	template: "<b>Remind me to add line length calculator</b>"
+})
+
+Vue.component('test-answers', {
+    data: function() {
+    	return {
+        	ip: ""
+        }
+    },
+	template: `
+    	<div>
+        	<h1>Your ip (<b>{{ ip }}</b>) will now be forwarded to the education department.<h1>
+    		<img src="https://i1.sndcdn.com/artworks-SDP95erPKKyVHykD-XyfUnw-t500x500.jpg" alt="sus">
+        </div>
+        `,
+    async mounted () {
+    	const res = await(
+        		await fetch('https://ipinfo.io/', 
+                {headers: {"Accept": "application/json"}
+                })
+        	).json()
+         this.ip = res.ip
+        
+	}
+})
+
+Vue.component('midpoint-calculator', {
+	template: `
+    	<div>
+        	x1 <input v-model.number="x1"><br>
+            y1 <input v-model.number="y1"><br>
+            x2 <input v-model.number="x2"><br>
+            y2 <input v-model.number="y2"><br>
+            {{ res }}
+    	</div>
+    `,
+    data: function() {
+    	return {
+        	x1: 0,
+            x2: 0,
+            y1: 0,
+            y2: 0,
+            res: ""
+        }
+    },
+    watch: {
+    	x1: "calc",
+        x2: "calc",
+        y1: "calc",
+        y2: "calc"
+    },
+	methods: {
+    	calc() {
+        	const res = `${(this.x1+this.x2)/2},${(this.y1+this.y2)/2}`
+            this.res = (res.includes('NaN'))? "Your math suck xd" : res
+        }
+    }
+})
+
+Vue.component('line-length-calculator', {
+	template: `
+    	<div>
+        	x1 <input v-model.number="x1"><br>
+            y1 <input v-model.number="y1"><br>
+            x2 <input v-model.number="x2"><br>
+            y2 <input v-model.number="y2"><br>
+            {{ res }}
+    	</div>
+    `,
+    data: function() {
+    	return {
+        	x1: 0,
+            x2: 0,
+            y1: 0,
+            y2: 0,
+            res: ""
+        }
+    },
+    watch: {
+    	x1: "calc",
+        x2: "calc",
+        y1: "calc",
+        y2: "calc"
+    },
+	methods: {
+    	calc() {
+        	const horDist = (Math.max(this.x1, this.x2) - Math.min(this.x1, this.x2))
+        	const verDist = (Math.max(this.y1, this.y2) - Math.min(this.y1, this.y2))
+            
+            const len = Math.sqrt(Math.pow(horDist,2)+Math.pow(verDist,2))
+            
+        	const res = `rise ${verDist} run ${horDist} length ${len}`
+            this.res = (res.includes('NaN'))? "Your math suck xd" : res
+        }
+    }
+})
+
+Vue.component('gradient-finder', {
+	template: `
+    	<div>
+        	x1 <input v-model="x1"><br>
+            y1 <input v-model="y1"><br>
+            x2 <input v-model="x2"><br>
+            y2 <input v-model="y2"><br>
+            {{ res }}
+    	</div>
+    `,
+    data: function() {
+    	return {
+        	x1: 0,
+            x2: 0,
+            y1: 0,
+            y2: 0,
+            res: ""
+        }
+    },
+    watch: {
+    	x1: "calc",
+        x2: "calc",
+        y1: "calc",
+        y2: "calc"
+    },
+	methods: {
+    	calc() {
+        	const res = `
+(${this.y1}-${this.y2})/(${this.x1}-${this.x2}) = 
+${(parseInt(this.y1) - parseInt(this.y2))}/${(parseInt(this.x1) - parseInt(this.x2))}
+and then type this in calc bc i too lazy to add auto minimize fraction`
+            this.res = (res.includes('NaN'))? "Your math suck xd" : res
+        }
+    }
+})
+
+Vue.component('pythag-calculator', {
+	template: `
+    	<div>
+        	num1 <input v-model="n1"><br>
+            num2 <input v-model="n2"><br>
+            {{ res }}
+    	</div>
+    `,
+    data: function() {
+    	return {
+        	n1: 0,
+            n2: 0,
+            res: ""
+        }
+    },
+    watch: {
+    	n1: "calc",
+        n2: "calc"
+    },
+	methods: {
+    	calc() {
+            this.res = Math.sqrt(Math.pow(this.n1,2)+Math.pow(this.n2,2))
+        }
+    }
+})
+
+Vue.component('pythag-other-way-around', {
+	template: `
+    	<div>
+        	the long side <input v-model="n1"><br>
+            num2 <input v-model="n2"><br>
+            {{ res }}
+    	</div>
+    `,
+    data: function() {
+    	return {
+        	n1: 0,
+            n2: 0,
+            res: ""
+        }
+    },
+    watch: {
+    	n1: "calc",
+        n2: "calc"
+    },
+	methods: {
+    	calc() {
+            this.res = Math.sqrt(Math.pow(this.n1,2)-Math.pow(this.n2,2))
+        }
+    }
+})
+
+var app = new Vue({
+	el: "#app",
+    data: {
+    	tool: "default",
+        tools: [ 'midpoint-calculator',
+        		'pythag-calculator',
+                'pythag-other-way-around',
+                'line-length-calculator',
+                'gradient-finder',
+                'test-answers']
+    }
+})
+</script>
+
+<style>
+body {
+  margin: 0;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 25%;
+  background-color: #f1f1f1;
+  position: fixed;
+  height: 100%;
+  overflow: auto;
+}
+
+li a {
+  display: block;
+  color: #000;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+li a.active {
+  background-color: #04AA6D;
+  color: white;
+}
+
+li a:hover:not(.active) {
+  background-color: #555;
+  color: white;
+}
+</style>
